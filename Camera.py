@@ -1,6 +1,7 @@
 from Pixel import Pixel
 from Sensor import Sensor
 from Aperture import Aperture
+from Ray import Ray
 from Objective import Lens, Propagation, PropagationLens, Objective
 import numpy as np
 import math
@@ -52,6 +53,8 @@ class Camera:
         outgoing_ray_dx = self.C*sensor_pixel_ray.x + self.C*(self.z_s - sensor_pixel_ray.z)*sensor_pixel_ray.dx/sensor_pixel_ray.dz + self.D*sensor_pixel_ray.dx/(1-self.dy**2)**0.5
         outgoing_ray_dy = self.C*sensor_pixel_ray.x + self.C*(self.z_s - sensor_pixel_ray.z)*sensor_pixel_ray.dx/sensor_pixel_ray.dz + self.D*sensor_pixel_ray.dx/(1-self.dy**2)**0.5
         outgoing_ray_dz = (1-outgoing_ray_dx**2-outgoing_ray_dy**2)**0.5
+
+        return Ray(outgoing_ray_x, outgoing_ray_y, outgoing_ray_z, outgoing_ray_dx, outgoing_ray_dy, outgoing_ray_dz)
     
     def trace_ray_from_sensor_pixel_and_aperture_points(self, o_x, o_y, a_x, a_y):
         K = (1 - (self.z_s - self.z_o)/(self.z_a - self.z_o))
@@ -62,3 +65,5 @@ class Camera:
         outgoing_ray_dx = o_x*(self.C*(1-K) - self.D) + a_x*(self.C*K + self.D)
         outgoing_ray_dy = o_y*(self.C*(1-K) - self.D) + a_y*(self.C*K + self.D)
         outgoing_ray_dz = (1-outgoing_ray_dx**2-outgoing_ray_dy**2)**0.5
+
+        return Ray(outgoing_ray_x, outgoing_ray_y, outgoing_ray_z, outgoing_ray_dx, outgoing_ray_dy, outgoing_ray_dz)
